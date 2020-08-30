@@ -32,6 +32,11 @@ function showScore (n: number) {
     basic.showNumber(n)
     basic.pause(500)
 }
+function gameRestart () {
+    if (playState != 0) {
+        playState = 0
+    }
+}
 function readPaddle () {
     quantPaddle = Math.round(input.acceleration(Dimension.X) / 400)
     quantPaddle = Math.constrain(quantPaddle, -2, 2)
@@ -46,15 +51,13 @@ function gameInit () {
     oldPaddleCol = 0
 }
 input.onButtonPressed(Button.AB, function () {
-    if (playState != 0) {
-        playState = 0
-    }
+    gameRestart()
 })
 function moveBall (bCol: number, pCol: number) {
     led.unplot(bCol, ballRow)
     ballRow += 1
     led.plotBrightness(bCol, ballRow, 100)
-    if (ballRow < 5) {
+    if (ballRow < 4) {
         return 0
     } else {
         if (bCol == pCol) {
@@ -63,21 +66,7 @@ function moveBall (bCol: number, pCol: number) {
         return -1
     }
 }
-let quantPaddle = 0
-let misses = 0
-let missLimit = 0
-let score = 0
-let catchGoal = 0
-let catches = 0
-let paddleCol = 0
-let dropState = 0
-let ballRow = 0
-let ballCol = 0
-let oldPaddleCol = 0
-let playState = 0
-playState = -2
-basic.showString("Catch")
-basic.forever(function () {
+function appForever () {
     if (playState == 0) {
         gameInit()
         while (playState == 0) {
@@ -89,4 +78,24 @@ basic.forever(function () {
     } else if (playState == -1) {
         basic.showIcon(IconNames.No)
     }
+}
+function appInit () {
+    playState = -2
+    basic.showString("Catch")
+}
+let quantPaddle = 0
+let playState = 0
+let misses = 0
+let missLimit = 0
+let score = 0
+let catchGoal = 0
+let catches = 0
+let paddleCol = 0
+let dropState = 0
+let ballRow = 0
+let ballCol = 0
+let oldPaddleCol = 0
+appInit()
+basic.forever(function () {
+    appForever()
 })
