@@ -1,15 +1,3 @@
-let ballCol = 0
-let ballRow = 0
-let dropState = 0
-let oldPaddleCol = 0
-let paddleCol = 0
-let catches = 0
-let catchGoal = 0
-let score = 0
-let missLimit = 0
-let misses = 0
-let playState = 0
-let quantPaddle = 0
 function dropInit () {
     ballCol = randint(0, 4)
     ballRow = -1
@@ -79,7 +67,7 @@ function gameInit () {
     oldPaddleCol = 0
 }
 input.onButtonPressed(Button.AB, function () {
-	
+    gameRestart()
 })
 function testDropStep (bCol: number) {
     led.unplot(bCol, ballRow)
@@ -121,6 +109,19 @@ function appInit () {
     playState = -2
     basic.showString("Catch")
 }
+let quantPaddle = 0
+let playState = 0
+let misses = 0
+let missLimit = 0
+let score = 0
+let catchGoal = 0
+let catches = 0
+let paddleCol = 0
+let oldPaddleCol = 0
+let dropState = 0
+let ballRow = 0
+let ballCol = 0
+appInit()
 basic.forever(function () {
-	
+    appForever()
 })
