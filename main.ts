@@ -50,8 +50,8 @@ function showScore (n: number) {
 function testDrop () {
     dropInit()
     basic.clearScreen()
-    while (dropState == 0) {
-        dropState = dropStep(ballCol, paddleCol)
+    while (dropState == testDropStep(ballCol)) {
+        dropState = 0
         basic.pause(200)
     }
 }
@@ -122,5 +122,5 @@ function appInit () {
     basic.showString("Catch")
 }
 basic.forever(function () {
-	
+    testDrop()
 })
