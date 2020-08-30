@@ -1,16 +1,31 @@
+let ballCol = 0
+let ballRow = 0
+let dropState = 0
+let oldPaddleCol = 0
+let paddleCol = 0
+let catches = 0
+let catchGoal = 0
+let score = 0
+let missLimit = 0
+let misses = 0
+let playState = 0
+let quantPaddle = 0
+function dropInit () {
+    ballCol = randint(0, 4)
+    ballRow = -1
+    dropState = 0
+}
 function drawPaddle (col: number) {
     led.unplot(oldPaddleCol, 4)
     led.plot(col, 4)
     oldPaddleCol = col
 }
 function gameStep () {
-    ballCol = randint(0, 4)
-    ballRow = -1
-    dropState = 0
+    dropInit()
     basic.clearScreen()
     while (dropState == 0) {
         paddleCol = readPaddle()
-        dropState = moveBall(ballCol, paddleCol)
+        dropState = dropStep(ballCol, paddleCol)
         drawPaddle(paddleCol)
         basic.pause(200)
         if (dropState == 1) {
@@ -32,10 +47,23 @@ function showScore (n: number) {
     basic.showNumber(n)
     basic.pause(500)
 }
+function testDrop () {
+    dropInit()
+    basic.clearScreen()
+    while (dropState == 0) {
+        dropState = dropStep(ballCol, paddleCol)
+        basic.pause(200)
+    }
+}
 function gameRestart () {
     if (playState != 0) {
         playState = 0
     }
+}
+function testPaddle () {
+    paddleCol = readPaddle()
+    drawPaddle(paddleCol)
+    basic.pause(200)
 }
 function readPaddle () {
     quantPaddle = Math.round(input.acceleration(Dimension.X) / 400)
@@ -51,18 +79,15 @@ function gameInit () {
     oldPaddleCol = 0
 }
 input.onButtonPressed(Button.AB, function () {
-    gameRestart()
+	
 })
-function moveBall (bCol: number, pCol: number) {
+function testDropStep (bCol: number) {
     led.unplot(bCol, ballRow)
     ballRow += 1
     led.plotBrightness(bCol, ballRow, 100)
     if (ballRow < 4) {
         return 0
     } else {
-        if (bCol == pCol) {
-            return 1
-        }
         return -1
     }
 }
@@ -79,23 +104,23 @@ function appForever () {
         basic.showIcon(IconNames.No)
     }
 }
+function dropStep (bCol: number, pCol: number) {
+    led.unplot(bCol, ballRow)
+    ballRow += 1
+    led.plotBrightness(bCol, ballRow, 100)
+    if (ballRow < 4) {
+        return 0
+    } else {
+        if (bCol == pCol) {
+            return 1
+        }
+        return -1
+    }
+}
 function appInit () {
     playState = -2
     basic.showString("Catch")
 }
-let quantPaddle = 0
-let playState = 0
-let misses = 0
-let missLimit = 0
-let score = 0
-let catchGoal = 0
-let catches = 0
-let paddleCol = 0
-let dropState = 0
-let ballRow = 0
-let ballCol = 0
-let oldPaddleCol = 0
-appInit()
 basic.forever(function () {
-    appForever()
+	
 })
